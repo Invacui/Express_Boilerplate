@@ -1,2 +1,0 @@
-<input type="text" value="http://127.0.0.1:8080/" id="preview" onkeydown="var k = event.which; if (k==8) this.value = this.value.slice(0, -1);else if (k==13) document.getElementById('prevButton').click(); else this.value+=String.fromCharCode((96 <= k && k <= 105)? k-48 : k); "/>
-<input type="button" onclick="window.location.replace(document.getElementById('preview').value);" value="Preview" id="prevButton" />
