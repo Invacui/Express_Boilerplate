@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 
 // Import env
 const env = require("dotenv");
+const globalConstantsObj = require("../constants/Global.constants");
 env.config({ path: "../../Private.env" });
 
 /**
@@ -27,14 +28,20 @@ class AuthService {
    * @returns {Object} user
    */
   async createUser(userData) {
-    
-    // Check if the user already exists
-    const existingUser = await this.get(userData.email); // Assuming email is unique
+      // Log the request
+      global.logger.info("[service] Processing request to create a new user",{
+        fileName:__filename,
+        methodName: this.createUser.name,
+        userData: userData
+      });
+
+    // // Check if the user already exists
+    // const existingUser = await this.get(userData.email); // Assuming email is unique
 
     // If user already exists, throw an error
-    if(!existingUser){
-      throw new Error("User already exists") //@Todo need to make a base error class
-    }
+    // if(!existingUser){
+    //   throw new Error("User already exists") //@Todo need to make a base error class
+    // }
     
     // Create a new user
     const user = authDaoObj.createUser(userData);
@@ -43,7 +50,7 @@ class AuthService {
     const token = jwt.sign(
       { userId: user._id },
       process.env.PRIVATE_TOKEN_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: globalConstantsObj.TOKEN_EXPIRY }
     );
     
     // Return the user and token by wrapping it in a DTO

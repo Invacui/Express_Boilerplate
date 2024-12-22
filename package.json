@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "author": "Ashutosh Kumar",
   "license": "MIT",

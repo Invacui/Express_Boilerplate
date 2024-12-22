@@ -42,7 +42,7 @@ class UserAuthController {
       }
       
       // Pass the data in service
-      const { user, token } = await authServiceObj.createUser(response);
+      const { user, token } = await authServiceObj.createUser(requestBody);
 
       // Return the response
       res.status(201).json({ user, token });

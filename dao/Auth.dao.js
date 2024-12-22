@@ -20,6 +20,12 @@ class AuthDao {
    * @returns
    */
   async createUser(userData) {
+      // Log the request
+      global.logger.info("[dao] Processing request to create a new user",{
+        fileName:__filename,
+        methodName: this.createUser.name
+      });
+
     const user = new User(userData);
     return await user.save();
   }

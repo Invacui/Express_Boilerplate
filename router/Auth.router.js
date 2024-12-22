@@ -25,8 +25,8 @@ const auth = express.Router();
  * @see validateUserId - A middleware to validate the user ID
  */
 
-// Create a new user
-auth.post("/worko/user", userAuthController.createUser);
+// Create a new user 
+auth.post("/", userAuthController.createUser);
 /* 
 // Get all users
 auth.get("/worko/user", getAllUsers);
