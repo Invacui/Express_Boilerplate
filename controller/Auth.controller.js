@@ -1,17 +1,76 @@
-//controller
-const env = require("dotenv");
-//ENV
-env.config({path:'../Private.env'});
-
 //SERVICES IMPORTS
-const {
-  getAllUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  partialUpdateUser,
-  deleteUser
-} = require('../services/userServices');
+const  authServiceObj  = require('../services/Auth.service');
+
+// createUserRequestBodyValidator
+const { CreateUserApiRequestValidator } = require('../validator/Auth.validator');
+
+/**
+ * @class UserAuthController
+ * 
+ * @description Controller class for handling user authentication
+ */
+class UserAuthController {
+  /**
+   * @method createUser
+   * 
+   * @description Controller for creating a new user
+   * 
+   * @param {*} req 
+   * @param {*} res 
+   * @param {*} next 
+   */
+  createUser = async (req, res , next) => {
+    try {
+      // Log the request
+      global.logger.info("[controller] Processing request to create a new user",{
+        fileName:__filename,
+        methodName: this.createUser.name
+      });
+
+      // Store the request body
+      const  requestBody  = req.body;
+
+      // Validate the request body
+      const {error , response} = CreateUserApiRequestValidator.validate(requestBody, { abortEarly: false });
+
+      // If there are errors, return the error message
+      if(error){
+        return res.status(400).json({
+          message: 'Validation error',
+          details: error.details.map(x => x.message)
+        });
+      }
+      
+      // Pass the data in service
+      const { user, token } = await authServiceObj.createUser(response);
+
+      // Return the response
+      res.status(201).json({ user, token });
+    } catch (error) {
+      next(error.message);
+    } 
+  };
+}
+
+module.exports = UserAuthController;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
 //FETCH USERS
 exports.getAllUsers = async (req, res) => {
   try {
@@ -21,6 +80,7 @@ exports.getAllUsers = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 //FETCH USERS BY ID
 exports.getUserById = async (req, res) => {
   try {
@@ -33,17 +93,6 @@ exports.getUserById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-//CREATE USERS
-
-exports.createUser = async (req, res) => {
-  try {
-    const { user, token } = await createUser(req.body);
-    res.status(201).json({ user, token });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 //UPDATE USERS
 exports.updateUser = async (req, res) => {
   try {
@@ -79,8 +128,4 @@ exports.deleteUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
-
-
-
-
+}; */
